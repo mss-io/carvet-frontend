@@ -102,7 +102,7 @@ describe('deriveView', () => {
     expect(v.cards.trend).toMatchObject({
       eyebrow: 'Trend over time',
       title: 'Mean CO₂ emissions and engine size by model year',
-      note: 'Yearly means are calculated from the currently included records. Valid CO₂ values: 4; valid engine-size values: 4.',
+      note: 'Yearly means use the currently included records. Valid CO₂ values: 4; valid engine-size values: 4.',
     })
     expect(v.cards.class).toMatchObject({ eyebrow: 'By vehicle class', title: 'Mean CO₂ emissions by vehicle class' })
     expect(v.cards.fuel).toMatchObject({ eyebrow: 'By fuel type', title: 'Record count and mean CO₂ by fuel' })

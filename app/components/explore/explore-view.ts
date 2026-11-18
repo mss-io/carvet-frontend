@@ -334,7 +334,7 @@ function renderOverview(rows: CsvRow[]): Partial<Record<ChartKey, CardView>> {
     trend: {
       eyebrow: 'Trend over time',
       title: 'Mean CO₂ emissions and engine size by model year',
-      note: `Yearly means are calculated from the currently included records. Valid CO₂ values: ${validCo2}; valid engine-size values: ${count(validCount(rows, ENGINE))}.`,
+      note: `Yearly means use the currently included records. Valid CO₂ values: ${validCo2}; valid engine-size values: ${count(validCount(rows, ENGINE))}.`,
       chart: trend,
     },
     class: { eyebrow: 'By vehicle class', title: 'Mean CO₂ emissions by vehicle class', chart: classChart },

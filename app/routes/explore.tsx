@@ -56,8 +56,6 @@ export default function Explore() {
   // Before the CSV loads (and if it fails) the page shows the stats-based figures.
   const loaded = rows !== null && rows.length > 0
   const view = loaded ? deriveView(rows, filters) : null
-  const cards = view ? view.cards : staticCards(stats)
-  const trend = cards.trend
   const status = failed
     ? ERROR_STATUS
     : rows === null
@@ -102,10 +100,7 @@ export default function Explore() {
       />
 
       <ExploreCharts
-        cards={{
-          ...cards,
-          trend: trend && { ...trend, note: trend.note?.replace('are calculated from', 'use') },
-        }}
+        cards={view ? view.cards : staticCards(stats)}
         visible={view ? view.visible : CHART_KEYS}
         chartKey={`${filters.fuel}|${filters.vehicleClass}`}
         showGrid={!failed && (view ? view.visible.length > 0 : true)}
