@@ -1,6 +1,6 @@
 import { fmt } from '../../lib/carvet'
 import type { Prediction } from '../../lib/types'
-import { Co2BandChip } from '../Co2BandChip'
+import { CO2_BAND_NOTE, Co2BandChip } from '../Co2BandChip'
 
 export type ResultState =
   | { kind: 'result'; prediction: Prediction }
@@ -8,7 +8,7 @@ export type ResultState =
   | { kind: 'empty' }
   | { kind: 'error'; message: string }
 
-export const EMPTY_MESSAGE = 'No estimate available yet for this vehicle.'
+export const EMPTY_MESSAGE = 'This mockup only includes the example vehicles. Pick one to see its official NRCan rating.'
 export const ERROR_MESSAGE = 'Something went wrong while estimating. Please try again.'
 
 export function ResultsPanel({
@@ -21,6 +21,7 @@ export function ResultsPanel({
 }) {
   const pending = state.kind === 'pending'
   const shown = state.kind === 'result' ? state.prediction : pending ? previous : null
+  const official = shown?.source === 'preset' && state.kind !== 'empty' && state.kind !== 'error'
 
   return (
     <section
@@ -32,7 +33,7 @@ export function ResultsPanel({
     >
       <div className="flex flex-col gap-1">
         <h2 id="resTitle" className="font-headline-sm text-headline-sm">
-          Estimate
+          {official ? 'Official NRCan rating' : shown ? 'Estimate' : 'Result'}
         </h2>
         <p id="outVehicle" className="font-body-sm text-body-sm text-tertiary">
           {shown?.label}
@@ -48,7 +49,7 @@ export function ResultsPanel({
             <div className="flex justify-between items-start">
               <span className="eyebrow">CO₂ emissions</span>
               <span
-                title="Bands: under 100 low · 100–165 moderate · 165–225 elevated · over 225 severe (g/km). Dataset mean 274 g/km."
+                title="Bands: under 100 low · 100–165 moderate · 165–225 elevated · over 225 severe (g/km). A CarVet display aid, not the NRCan CO₂ rating."
               >
                 {shown ? <Co2BandChip gkm={shown.co2} /> : null}
               </span>
@@ -69,39 +70,24 @@ export function ResultsPanel({
               <span>Low</span>
               <span>Severe</span>
             </p>
+            <p className="font-label-sm text-label-sm text-tertiary">{CO2_BAND_NOTE}</p>
           </div>
           <div className="rounded-xl bg-surface-container-low p-space-md flex flex-col gap-2">
-            <span className="eyebrow">Fuel use</span>
+            <span className="eyebrow">Combined fuel use</span>
             <p>
               <span id="outFuel" className="text-display-mobile md:font-display md:text-display tabular-nums">
                 {shown ? fmt(shown.comb, 1) : '—'}
               </span>{' '}
               <span className="font-title text-title text-tertiary">L/100 km</span>
             </p>
-            <div className="grid grid-cols-2 gap-2">
-              <div className="rounded-lg bg-white p-2">
-                <span className="eyebrow">City</span>
-                <p>
-                  <span id="outCity" className="font-headline-sm text-headline-sm tabular-nums">
-                    {shown ? fmt(shown.city, 1) : '—'}
-                  </span>{' '}
-                  L/100 km
-                </p>
-              </div>
-              <div className="rounded-lg bg-white p-2">
-                <span className="eyebrow">Highway</span>
-                <p>
-                  <span id="outHwy" className="font-headline-sm text-headline-sm tabular-nums">
-                    {shown ? fmt(shown.hwy, 1) : '—'}
-                  </span>{' '}
-                  L/100 km
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       )}
-      <p className="font-label-sm text-label-sm text-tertiary">Estimate, not an official NRCan rating.</p>
+      {shown && (
+        <p className="font-label-sm text-label-sm text-tertiary">
+          {official ? 'Official NRCan rating for this tested vehicle.' : 'Estimate, not an official NRCan rating.'}
+        </p>
+      )}
     </section>
   )
 }

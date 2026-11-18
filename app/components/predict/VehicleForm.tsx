@@ -155,7 +155,7 @@ export function VehicleForm({
           <select id="fFuel" className="field" value={values.fuel} onChange={(e) => onChange({ fuel: e.target.value })}>
             {D.fuels.map((f) => (
               <option key={f.code} value={f.code}>
-                {`${f.code} — ${f.label}`}
+                {`${f.code}: ${f.label}`}
               </option>
             ))}
           </select>

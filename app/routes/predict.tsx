@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Icon } from '../components/Icon'
 import { PresetButtons } from '../components/PresetButtons'
 import { readPredictHash } from '../components/predict/predict-hash'
 import { ERROR_MESSAGE, ResultsPanel, type ResultState } from '../components/predict/ResultsPanel'
@@ -7,6 +8,7 @@ import { VehicleForm, type FormValues } from '../components/predict/VehicleForm'
 import { vehicleName } from '../lib/carvet'
 import { predict, stats } from '../lib/data'
 import { createLatestGuard } from '../lib/latest-guard'
+import { MODEL_FACTS, trainingSummary } from '../lib/model-facts'
 import type { Prediction, Preset, VehicleRecord, VehicleSpec } from '../lib/types'
 import type { Route } from './+types/predict'
 
@@ -16,10 +18,13 @@ export function meta(_args: Route.MetaArgs) {
     {
       name: 'description',
       content:
-        'CarVet — predicting vehicle CO₂ emissions and fuel consumption from specifications, by Team Moneyball.',
+        'CarVet: predicting combined fuel consumption and CO₂ emissions from vehicle specifications, by Team Moneyball.',
     },
   ]
 }
+
+export const MOCKUP_NOTE =
+  'Mockup: shows official NRCan ratings for the example vehicles only. The CarVet model will be connected in a later phase.'
 
 const presets = stats.presets.predict
 
@@ -91,7 +96,10 @@ export default function Predict() {
         <div className="max-w-2xl flex flex-col gap-2">
           <h1 className="text-headline-xl-mobile md:font-headline-xl md:text-headline-xl">Predict CO₂ and fuel use.</h1>
           <p className="font-body-lg text-body-lg text-on-surface-variant">
-            Enter a vehicle's specs. Get emissions, fuel use and running cost.
+            Pick an example vehicle to see its official NRCan rating, fuel use and running cost.
+          </p>
+          <p className="estimate-note">
+            <Icon name="info" /> {MOCKUP_NOTE}
           </p>
         </div>
         <div className="flex flex-col gap-2">
@@ -125,12 +133,10 @@ export default function Predict() {
         <summary className="cursor-pointer font-title text-title">About these estimates</summary>
         <div className="flex flex-col gap-2 mt-3 font-body-sm text-body-sm text-on-surface-variant">
           <p>
-            A regression model trained on 29,215 NRCan lab-tested vehicles (1995–2026, gas, diesel and hybrid) predicts
-            CO₂ and fuel use from seven specs.
+            {`When connected, the ${MODEL_FACTS.name} model will predict combined fuel consumption (L/100 km) from seven specs, and CO₂ (g/km) will be calculated from it using a near-constant factor per fuel type. ${trainingSummary()}`}
           </p>
           <p>
-            Results are estimates, not official ratings for any specific vehicle. CarVet uses public data and collects
-            no personal information.
+            The model is not connected in this mockup. Example vehicles show their official NRCan rating. CarVet uses public data and collects no personal information.
           </p>
         </div>
       </details>
