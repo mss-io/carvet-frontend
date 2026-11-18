@@ -70,6 +70,12 @@ describe('SiteFooter', () => {
   it('renders the credits', () => {
     expect(html(<SiteFooter />)).toContain('CarVet by Team Moneyball · Data: NRCan, OGL-Canada')
   })
+
+  it('identifies the mockup and its official ratings', () => {
+    const out = html(<SiteFooter />)
+    expect(out).toContain('CarVet is a course mockup. Values shown are official NRCan ratings.')
+    expect(out).not.toContain('Estimates are not official NRCan ratings.')
+  })
 })
 
 describe('Icon', () => {

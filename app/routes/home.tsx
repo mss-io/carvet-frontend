@@ -1,8 +1,9 @@
 import { Link } from 'react-router'
-import { Co2BandChip } from '../components/Co2BandChip'
+import { CO2_BAND_NOTE, Co2BandChip } from '../components/Co2BandChip'
 import { Icon } from '../components/Icon'
 import { annualCost, fmt, formatMoney, vehicleName } from '../lib/carvet'
 import { stats } from '../lib/data'
+import { cvSummary, MODEL_FACTS, NOTEBOOK_SOURCE, trainingSummary } from '../lib/model-facts'
 import type { Route } from './+types/home'
 
 export function meta(_args: Route.MetaArgs) {
@@ -11,7 +12,7 @@ export function meta(_args: Route.MetaArgs) {
     {
       name: 'description',
       content:
-        'CarVet — predicting vehicle CO₂ emissions and fuel consumption from specifications, by Team Moneyball.',
+        'CarVet: predicting combined fuel consumption and CO₂ emissions from vehicle specifications, by Team Moneyball.',
     },
   ]
 }
@@ -50,7 +51,7 @@ const modelCards = [
   {
     icon: 'cpu',
     title: 'Approach',
-    text: 'Supervised regression on seven vehicle specifications, trained on 29,215 NRCan records (1995–2026).',
+    text: `${MODEL_FACTS.name} regression on seven vehicle specifications. ${trainingSummary()}`,
   },
   {
     icon: 'activity',
@@ -103,9 +104,10 @@ export default function Home() {
             <Icon name="database" /> Built on <span>{fmt(stats.kpis.records)}</span> NRCan records (1995–2026)
           </span>
           <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
-            Official ratings only exist for vehicle configurations that have been tested and published. CarVet estimates
-            CO₂ (g/km) and combined fuel consumption (L/100 km) for any configuration from seven specifications —
-            helping sustainability teams, buyers and fleet managers compare options before purchase.
+            Official ratings only exist for vehicle configurations that have been tested and published. CarVet is
+            designed to predict combined fuel consumption (L/100 km) for any configuration from seven specifications,
+            and to calculate CO₂ (g/km) from it, helping sustainability teams, buyers and fleet managers compare options
+            before purchase.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link to="/predict" className="btn-primary">
@@ -165,8 +167,9 @@ export default function Home() {
             </div>
           </div>
           <p className="font-body-sm text-body-sm text-tertiary">
-            Official NRCan rated values for a tested vehicle. For untested configurations, CarVet returns an estimate.
+            Official NRCan rated values for a tested vehicle. The CarVet model will be connected in a later phase.
           </p>
+          <p className="font-body-sm text-body-sm text-tertiary">{CO2_BAND_NOTE}</p>
         </aside>
       </section>
 
@@ -200,7 +203,8 @@ export default function Home() {
             Seven input features
           </h2>
           <p className="font-body-md text-body-md text-on-surface-variant">
-            Supervised regression. Targets: CO₂ emissions (g/km, primary) and combined fuel consumption (L/100 km).
+            Supervised regression. Target: combined fuel consumption (L/100 km). CO₂ (g/km) is calculated from it using
+            a near-constant factor per fuel type.
           </p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
@@ -235,6 +239,14 @@ export default function Home() {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2">
+          <div className="card flex flex-col gap-3 md:col-span-2">
+            <h3 className="flex items-center gap-2 font-title text-title">
+              <Icon name="chart-column" className="text-primary" /> Performance
+            </h3>
+            <p className="font-body-sm text-body-sm text-tertiary">{NOTEBOOK_SOURCE}</p>
+            <p className="font-body-sm text-body-sm text-on-surface-variant">{cvSummary()}</p>
+            <p className="font-body-sm text-body-sm text-on-surface-variant">Hold-out test results: pending</p>
+          </div>
           {modelCards.map((c) => (
             <div key={c.title} className="card flex flex-col gap-3">
               <h3 className="flex items-center gap-2 font-title text-title">
@@ -249,9 +261,10 @@ export default function Home() {
       {/* [Interactive Action Banner] */}
       <section className="rounded-xl bg-primary text-on-primary p-space-lg md:p-space-xl flex flex-col md:flex-row md:items-center md:justify-between gap-space-md">
         <div>
-          <h2 className="font-headline-lg text-headline-lg">Estimate a vehicle’s emissions</h2>
+          <h2 className="font-headline-lg text-headline-lg">Explore vehicle emissions</h2>
           <p className="font-body-md text-body-md text-on-primary-container mt-1">
-            Enter a vehicle on Predict, compare two side by side, or explore the 29,215-record dataset.
+            Try the example vehicles on Predict, compare cars side by side, or explore the {fmt(stats.kpis.records)}-record
+            dataset.
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
