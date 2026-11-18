@@ -11,7 +11,7 @@ export function compareAddState(
   }
   if (!current) return { disabled: true, note: null };
   if (selected.includes(current)) {
-    return { disabled: true, note: "This car is already added — pick a different model or version." };
+    return { disabled: true, note: "This car is already added. Pick a different model or version." };
   }
   return { disabled: false, note: null };
 }

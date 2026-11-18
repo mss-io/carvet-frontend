@@ -36,7 +36,7 @@ describe('SiteHeader variants', () => {
         <SiteHeader />
       </MemoryRouter>,
     )
-  const DATA = 'Data source: Natural Resources Canada Fuel Consumption Ratings — Open Government Licence – Canada'
+  const DATA = 'Data source: Natural Resources Canada Fuel Consumption Ratings, Open Government Licence – Canada'
 
   it('centres the nav only on /, with no data source strip', () => {
     const out = at('/')

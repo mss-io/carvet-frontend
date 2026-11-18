@@ -23,10 +23,13 @@ function Verdict({ selected, km, price }: { selected: VehicleRecord[]; km: numbe
   // Quantify the gap so the user sees the real-world payoff, not just a name.
   const co2Drop = worst.co2 > 0 ? Math.round(((worst.co2 - greenest.co2) / worst.co2) * 100) : 0
   const saveYr = cheapest && costliest ? costliest.c - cheapest.c : 0
-  const sameWinner = cheapest && greenest === cheapest.r
   const gName = vehicleName(greenest)
-  const cName = cheapest ? vehicleName(cheapest.r) : '—'
-  const headline = sameWinner ? `🏆 ${gName} — greenest & cheapest to run` : `🌱 ${gName} is greenest  ·  💰 ${cName} is cheapest to run`
+  let headline = `🌱 ${gName} is greenest`
+  if (cheapest) {
+    headline = greenest === cheapest.r
+      ? `🏆 ${gName}: greenest & cheapest to run`
+      : `${headline}  ·  💰 ${vehicleName(cheapest.r)} is cheapest to run`
+  }
 
   return (
     <p id="verdict">
@@ -58,7 +61,7 @@ export function CompareResults({ selected, km, price }: { selected: VehicleRecor
   }
   const specs: [string, (r: VehicleRecord) => string | number][] = [
     ['CO₂ (g/km)', (r) => r.co2],
-    ['Fuel combined (L/100km)', (r) => r.comb.toFixed(1)],
+    ['Fuel combined (L/100 km)', (r) => r.comb.toFixed(1)],
     ['Fuel / year', cost],
     ['Engine (L)', (r) => r.engine.toFixed(1)],
     ['Cylinders', (r) => r.cyl],
@@ -78,7 +81,7 @@ export function CompareResults({ selected, km, price }: { selected: VehicleRecor
       </section>
 
       <section id="chartSection" className="card">
-        <span className="eyebrow">CO₂ emissions — lower is better</span>
+        <span className="eyebrow">CO₂ emissions (lower is better)</span>
         <h2 className="font-title text-title mb-3 flex items-center gap-2">
           <Icon name="leaf" className="text-primary text-xl" /> Carbon emissions by car
         </h2>

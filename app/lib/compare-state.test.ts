@@ -15,7 +15,7 @@ describe("compareAddState", () => {
     const a = mk("a");
     expect(compareAddState([a], a)).toEqual({
       disabled: true,
-      note: "This car is already added — pick a different model or version.",
+      note: "This car is already added. Pick a different model or version.",
     });
   });
   it("blocks a fifth car, taking priority over duplicate", () => {
