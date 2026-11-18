@@ -90,6 +90,15 @@ Explore handling of 29,215 vs 25,822 (decided by the user, option A): label Expl
 - **AGENTS.md:** Mockup parity section lists these Phase 2 text changes as intentional differences.
 - **Tests:** update affected assertions in `home.test.tsx`, `predict.test.tsx`, `explore.test.tsx`, `explore-view.test.ts`, `compare.test.tsx`, `compare-state.test.ts`; add tests for the preset and empty Predict labels, the Mockup note, the model-facts module (counts add up, raw total equals `stats.kpis.records`), and a guard against em-dashes in prerendered pages (the guard allows a standalone "—" missing-value placeholder and fails only on em-dashes inside prose).
 
+## Follow-up fixes (2026-11-18)
+
+- **Home "Licence & privacy":** "NRCan data under Open Government Licence – Canada. Public, non-personal data. When the API is connected, inputs will be validated and rate-limited."
+- **Home "Maintenance":** "Vehicle technology shifted 1995–2026 (concept drift). Planned: retrain each year when NRCan publishes a new model year, with coverage of the shift to hybrids and EVs."
+- **Explore KPI row:**
+  - Mean combined fuel shows the same value as the fuel histogram (12.04: 2 decimals, en-CA), via one shared formatter (`fmtMeanFuel` in `explore-view.ts`) used by both, before and after the CSV loads.
+  - Model years shows "1995–2026" with sub-label "32 years" (both derived from the data).
+- **Predict:** heading "Predict fuel use and CO₂."; the details section is titled "About the model". The meta title ("CarVet · Predict") and description already lead with fuel use, so they are unchanged.
+
 ## Left to the builder
 
 - Exact markup and spacing of the Performance card, Mockup note, smog note and band notes, using existing card styles and theme tokens.

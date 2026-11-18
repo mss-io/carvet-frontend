@@ -56,7 +56,7 @@ const modelCards = [
   {
     icon: 'activity',
     title: 'Maintenance',
-    text: 'Vehicle technology shifted 1995–2026 (concept drift). Retrained each year when NRCan publishes a new model year, with planned coverage of the shift to hybrids and EVs.',
+    text: 'Vehicle technology shifted 1995–2026 (concept drift). Planned: retrain each year when NRCan publishes a new model year, with coverage of the shift to hybrids and EVs.',
   },
   {
     icon: 'users',
@@ -66,7 +66,7 @@ const modelCards = [
   {
     icon: 'scale',
     title: 'Licence & privacy',
-    text: 'NRCan data under Open Government Licence – Canada. Public, non-personal data; inputs validated and API rate-limited.',
+    text: 'NRCan data under Open Government Licence – Canada. Public, non-personal data. When the API is connected, inputs will be validated and rate-limited.',
   },
 ] as const
 

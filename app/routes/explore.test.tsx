@@ -16,7 +16,7 @@ describe('Explore', () => {
     for (const text of [
       'Canadian light-duty vehicles, 1995–2026',
       '29,215',
-      '1995–26',
+      '>1995–2026</p>',
       '32 years',
       '274.2',
       'range 94–633',
@@ -27,6 +27,11 @@ describe('Explore', () => {
     ]) {
       expect(out).toContain(text)
     }
+  })
+
+  it('shows the same mean combined fuel in the KPI card and the histogram', () => {
+    expect(out).toContain('Mean combined fuel (L/100 km)</span><p class="font-headline-lg text-headline-lg tabular-nums">12.04</p>')
+    expect(out).toContain('mean 12.04 · median 11.6 · SD 3.17')
   })
 
   it('shows the loading status and no canvas before the CSV loads', () => {

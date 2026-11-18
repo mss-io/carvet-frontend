@@ -94,7 +94,7 @@ export default function Predict() {
       {/* [Hero] */}
       <section className="flex flex-col gap-space-md">
         <div className="max-w-2xl flex flex-col gap-2">
-          <h1 className="text-headline-xl-mobile md:font-headline-xl md:text-headline-xl">Predict CO₂ and fuel use.</h1>
+          <h1 className="text-headline-xl-mobile md:font-headline-xl md:text-headline-xl">Predict fuel use and CO₂.</h1>
           <p className="font-body-lg text-body-lg text-on-surface-variant">
             Pick an example vehicle to see its official NRCan rating, fuel use and running cost.
           </p>
@@ -128,9 +128,9 @@ export default function Predict() {
         </div>
       </div>
 
-      {/* [About these estimates] */}
+      {/* [About the model] */}
       <details className="card">
-        <summary className="cursor-pointer font-title text-title">About these estimates</summary>
+        <summary className="cursor-pointer font-title text-title">About the model</summary>
         <div className="flex flex-col gap-2 mt-3 font-body-sm text-body-sm text-on-surface-variant">
           <p>
             {`When connected, the ${MODEL_FACTS.name} model will predict combined fuel consumption (L/100 km) from seven specs, and CO₂ (g/km) will be calculated from it using a near-constant factor per fuel type. ${trainingSummary()}`}

@@ -32,6 +32,13 @@ describe('Predict', () => {
     expect(out).not.toContain("Enter a vehicle's specs")
   })
 
+  it('leads with the primary target and names the model section', () => {
+    expect(out).toContain('Predict fuel use and CO₂.')
+    expect(out).toContain('About the model</summary>')
+    expect(out).not.toContain('Predict CO₂ and fuel use.')
+    expect(out).not.toContain('About these estimates')
+  })
+
   it('uses colons in the fuel option labels', () => {
     expect(out).toContain('X: Regular gasoline')
     expect(out).not.toContain('X — Regular gasoline')

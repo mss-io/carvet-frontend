@@ -55,7 +55,8 @@ describe('KPIs', () => {
   it('prerenders from stats like CarVet.pages.explore', () => {
     expect(staticKpis(stats)).toEqual({
       records: '29,215',
-      years: '1995–26',
+      years: '1995–2026',
+      yearSpan: '32 years',
       makes: '56',
       classes: '17',
       co2: '274.2',
@@ -68,15 +69,29 @@ describe('KPIs', () => {
   it('derives from rows like updateKpis', () => {
     expect(rowKpis(rows)).toEqual({
       records: '4',
-      years: '2',
+      years: '2020–2021',
+      yearSpan: '2 years',
       makes: '3',
       classes: '2',
       co2: '257.5',
       co2Range: '190–320 g/km · n=4',
-      fuel: '10.8',
+      fuel: '10.75',
       fuelRange: '8–14 L/100 km · n=4',
     })
-    expect(rowKpis([])).toMatchObject({ co2: '—', co2Range: 'No valid CO₂ values', fuelRange: 'No valid fuel values' })
+    expect(rowKpis([])).toMatchObject({ years: '—', yearSpan: '0 years', fuel: '—', co2: '—', co2Range: 'No valid CO₂ values', fuelRange: 'No valid fuel values' })
+  })
+})
+
+describe('mean combined fuel', () => {
+  it('KPI and histogram show the same value, static and derived', () => {
+    expect(staticKpis(stats).fuel).toBe('12.04')
+    expect(staticCards(stats).fuelHist.stats).toContain(`mean ${staticKpis(stats).fuel} `)
+    const v = deriveView(rows, all)
+    expect(v.kpis.fuel).toBe('10.75')
+    expect(v.cards.fuelHist!.stats).toContain(`Mean ${v.kpis.fuel} L/100 km`)
+  })
+  it('always shows two decimals', () => {
+    expect(rowKpis([row({ 'Combined (L/100 km)': 10.5 })]).fuel).toBe('10.50')
   })
 })
 

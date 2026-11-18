@@ -14,7 +14,7 @@ export function KpiCards({ kpis }: { kpis: Kpis }) {
       <div className="card p-4">
         <span className="eyebrow">Model years</span>
         <p className={VALUE}>{kpis.years}</p>
-        <p className={NOTE}>32 years</p>
+        <p className={NOTE}>{kpis.yearSpan}</p>
       </div>
       <div className="card p-4">
         <span className="eyebrow">Makes</span>

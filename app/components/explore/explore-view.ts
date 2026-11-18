@@ -40,6 +40,8 @@ export interface Filters {
 export interface Kpis {
   records: string
   years: string
+  /** e.g. "32 years": distinct model years in the data. */
+  yearSpan: string
   makes: string
   classes: string
   co2: string
@@ -86,6 +88,10 @@ const ENGINE = 'Engine size (L)'
 const fmtMax = (v: number | null, digits = 1) =>
   v === null || !Number.isFinite(v) ? '—' : v.toLocaleString('en-CA', { maximumFractionDigits: digits })
 const count = (n: number) => n.toLocaleString('en-CA')
+/** Mean combined fuel (L/100 km), shared by the KPI card and the fuel histogram so they cannot drift. */
+export const fmtMeanFuel = (v: number | null) => fmt(v, 2)
+const meanFuel = (rows: CsvRow[]) => fmtMeanFuel(averageFor(rows, FUEL))
+const yearSpan = (n: number) => `${count(n)} year${n === 1 ? '' : 's'}`
 const fuelName = (code: string) => EXPLORE_FUEL_LABELS[code] || code
 const validCount = (rows: CsvRow[], key: keyof CsvRow) => rows.filter((r) => r[key] !== null).length
 
@@ -111,12 +117,13 @@ export function staticKpis(stats: Stats): Kpis {
   const k = stats.kpis
   return {
     records: fmt(k.records),
-    years: `${k.years.min}–${String(k.years.max).slice(2)}`,
+    years: `${k.years.min}–${k.years.max}`,
+    yearSpan: yearSpan(k.years.count),
     makes: fmt(k.makes),
     classes: fmt(k.classes),
     co2: fmt(k.co2.mean, 1),
     co2Range: `range ${k.co2.min}–${k.co2.max}`,
-    fuel: fmt(k.fuel.mean, 2),
+    fuel: fmtMeanFuel(k.fuel.mean),
     fuelRange: `range ${k.fuel.min.toFixed(1)}–${k.fuel.max.toFixed(1)}`,
   }
 }
@@ -125,18 +132,20 @@ export function rowKpis(rows: CsvRow[]): Kpis {
   const unique = (key: keyof CsvRow) => new Set(rows.map((r) => r[key]).filter((v) => v !== null && v !== '')).size
   const co2 = rows.map((r) => r[CO2]).filter((v): v is number => v !== null)
   const fuel = rows.map((r) => r[FUEL]).filter((v): v is number => v !== null)
+  const years = rows.map((r) => r['Model year']).filter((v): v is number => typeof v === 'number')
   const min = (vs: number[]) => vs.reduce((a, b) => Math.min(a, b))
   const max = (vs: number[]) => vs.reduce((a, b) => Math.max(a, b))
   return {
     records: count(rows.length),
-    years: count(unique('Model year')),
+    years: years.length ? `${min(years)}–${max(years)}` : '—',
+    yearSpan: yearSpan(unique('Model year')),
     makes: count(unique('Make')),
     classes: count(unique('Vehicle class')),
     co2: fmtMax(mean(co2), 1),
     co2Range: co2.length
       ? `${fmtMax(min(co2), 0)}–${fmtMax(max(co2), 0)} g/km · n=${count(co2.length)}`
       : 'No valid CO₂ values',
-    fuel: fmtMax(mean(fuel), 1),
+    fuel: meanFuel(rows),
     fuelRange: fuel.length
       ? `${fmtMax(min(fuel), 1)}–${fmtMax(max(fuel), 1)} L/100 km · n=${count(fuel.length)}`
       : 'No valid fuel values',
@@ -328,7 +337,7 @@ function renderOverview(rows: CsvRow[]): Partial<Record<ChartKey, CardView>> {
     fuelHist: {
       eyebrow: 'Primary target',
       title: 'Fuel consumption distribution',
-      stats: `Mean ${fmtMax(averageFor(rows, FUEL), 2)} L/100 km · ${count(validCount(rows, FUEL))} valid records`,
+      stats: `Mean ${meanFuel(rows)} L/100 km · ${count(validCount(rows, FUEL))} valid records`,
       chart: histChart(rows.map((row) => row[FUEL]), COLORS.teal),
     },
     trend: {
@@ -421,7 +430,7 @@ export function staticCards(stats: Stats): Record<ChartKey, CardView> {
     fuelHist: {
       eyebrow: 'Primary target',
       title: 'Fuel consumption distribution',
-      stats: `mean ${k.fuel.mean} · median ${k.fuel.median} · SD ${k.fuel.sd}`,
+      stats: `mean ${fmtMeanFuel(k.fuel.mean)} · median ${k.fuel.median} · SD ${k.fuel.sd}`,
       chart: null,
     },
     trend: { eyebrow: 'Trend over time', title: 'Mean CO₂ emissions and engine size by model year', note: '', chart: null },

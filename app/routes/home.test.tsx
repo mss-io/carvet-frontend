@@ -34,13 +34,15 @@ describe('Home', () => {
       CO2_BAND_NOTE,
       'The CarVet model will be connected in a later phase.',
       'is designed to predict',
+      'NRCan data under Open Government Licence – Canada. Public, non-personal data. When the API is connected, inputs will be validated and rate-limited.',
+      'Vehicle technology shifted 1995–2026 (concept drift). Planned: retrain each year when NRCan publishes a new model year, with coverage of the shift to hybrids and EVs.',
     ]) {
       expect(out).toContain(text)
     }
   })
 
   it('omits the previous training, target and prediction claims', () => {
-    for (const text of ['trained on 29,215', 'primary)', 'CarVet returns an estimate', 'Estimate a vehicle']) {
+    for (const text of ['trained on 29,215', 'primary)', 'CarVet returns an estimate', 'Estimate a vehicle', 'inputs validated and API rate-limited', 'Retrained each year']) {
       expect(out).not.toContain(text)
     }
   })
