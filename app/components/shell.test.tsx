@@ -36,7 +36,7 @@ describe('SiteHeader variants', () => {
         <SiteHeader />
       </MemoryRouter>,
     )
-  const DATA = 'Data source: Natural Resources Canada Fuel Consumption Ratings — Open Government Licence – Canada'
+  const DATA = 'Data source: Natural Resources Canada Fuel Consumption Ratings, Open Government Licence – Canada'
 
   it('centres the nav only on /, with no data source strip', () => {
     const out = at('/')
@@ -69,6 +69,13 @@ describe('SiteHeader variants', () => {
 describe('SiteFooter', () => {
   it('renders the credits', () => {
     expect(html(<SiteFooter />)).toContain('CarVet by Team Moneyball · Data: NRCan, OGL-Canada')
+  })
+
+  it('identifies the mockup and its official ratings', () => {
+    const out = html(<SiteFooter />)
+    expect(out).toContain('CarVet is a course mockup. Ratings come from official NRCan data; fuel costs and CO₂ bands are CarVet calculations.')
+    expect(out).not.toContain('Values shown are official NRCan ratings.')
+    expect(out).not.toContain('Estimates are not official NRCan ratings.')
   })
 })
 

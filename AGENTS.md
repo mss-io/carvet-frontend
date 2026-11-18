@@ -39,7 +39,8 @@ CarVet is a React Router 8 app (`ssr: false`) prerendered to static files and se
 - Reference: https://github.com/mssio/carvet-mockup at commit `2d4e53efb27c09553a4ad3f91d1107a08c5f81bf`. Clone it into `.mockup/` (gitignored).
 - The parity target is the mockup as rendered. Class names with no rule in its compiled CSS were no-ops and were dropped in the port.
 - Header nav is centred only on `/`; the Data-source strip appears only on `/compare`.
-- The one intentional difference is Predict's submit, which calls `predict()` in `app/lib/data.ts`.
+- Predict's submit calls `predict()` in `app/lib/data.ts`, which only matches the example vehicles. This build has no backend or real model.
+- The Phase 2 text changes are intentional. They cover the combined L/100 km target, deduplicated counts from `app/lib/model-facts.ts`, the notebook performance card, Predict's official-rating and mockup labels, removal of City/Highway from Predict results, the CO₂ band note, removal of em-dashes from prose, the mockup footer, and the Explore KPI row (Records "raw merged data" note; Model years as a full range such as "1995–2026" with a "32 years" label; mean fuel at 2 decimals and mean CO₂ at 1 decimal, shared with the histograms). See `docs/superpowers/specs/2026-11-18-phase2-model-alignment-design.md`.
 
 ### Tests
 

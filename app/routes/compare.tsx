@@ -16,7 +16,7 @@ export function meta(_args: Route.MetaArgs) {
     {
       name: 'description',
       content:
-        'CarVet — predicting vehicle CO₂ emissions and fuel consumption from specifications, by Team Moneyball.',
+        'CarVet: predicting combined fuel consumption and CO₂ emissions from vehicle specifications, by Team Moneyball.',
     },
   ]
 }

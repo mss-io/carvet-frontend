@@ -10,7 +10,7 @@ describe('Compare', () => {
     for (const text of [
       'Compare cars side by side',
       'Loading cars…',
-      'No cars yet — use the selector above to add your first car.',
+      'No cars yet. Use the selector above to add your first car.',
       'value="20000"',
       'value="1.65"',
     ]) {
@@ -23,6 +23,10 @@ describe('Compare', () => {
   it('has the page title and description', () => {
     const m = meta({} as never)
     expect(m[0]).toEqual({ title: 'CarVet · Compare' })
-    expect(m[1]).toMatchObject({ name: 'description' })
+    expect(m[1]).toEqual({
+      name: 'description',
+      content:
+        'CarVet: predicting combined fuel consumption and CO₂ emissions from vehicle specifications, by Team Moneyball.',
+    })
   })
 })

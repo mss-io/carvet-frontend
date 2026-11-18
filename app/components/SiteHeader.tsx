@@ -74,7 +74,7 @@ export function SiteHeader() {
       {path === '/compare' && (
         <div className="bg-surface-container-low border-t border-slate-200">
           <p className="max-w-7xl mx-auto px-margin-mobile md:px-margin py-1.5 font-label-sm text-label-sm text-tertiary flex items-center gap-1.5">
-            <Icon name="database" /> Data source: Natural Resources Canada Fuel Consumption Ratings — Open Government Licence – Canada
+            <Icon name="database" /> Data source: Natural Resources Canada Fuel Consumption Ratings, Open Government Licence – Canada
           </p>
         </div>
       )}

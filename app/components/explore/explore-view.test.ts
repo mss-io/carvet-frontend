@@ -55,7 +55,8 @@ describe('KPIs', () => {
   it('prerenders from stats like CarVet.pages.explore', () => {
     expect(staticKpis(stats)).toEqual({
       records: '29,215',
-      years: '1995–26',
+      years: '1995–2026',
+      yearSpan: '32 years',
       makes: '56',
       classes: '17',
       co2: '274.2',
@@ -68,23 +69,61 @@ describe('KPIs', () => {
   it('derives from rows like updateKpis', () => {
     expect(rowKpis(rows)).toEqual({
       records: '4',
-      years: '2',
+      years: '2020–2021',
+      yearSpan: '2 years',
       makes: '3',
       classes: '2',
       co2: '257.5',
       co2Range: '190–320 g/km · n=4',
-      fuel: '10.8',
+      fuel: '10.75',
       fuelRange: '8–14 L/100 km · n=4',
     })
-    expect(rowKpis([])).toMatchObject({ co2: '—', co2Range: 'No valid CO₂ values', fuelRange: 'No valid fuel values' })
+    expect(rowKpis([])).toMatchObject({ years: '—', yearSpan: '0 years', fuel: '—', co2: '—', co2Range: 'No valid CO₂ values', fuelRange: 'No valid fuel values' })
+  })
+})
+
+describe('mean combined fuel', () => {
+  it('KPI and histogram show the same value, static and derived', () => {
+    expect(staticKpis(stats).fuel).toBe('12.04')
+    expect(staticCards(stats).fuelHist.stats).toContain(`mean ${staticKpis(stats).fuel} `)
+    const v = deriveView(rows, all)
+    expect(v.kpis.fuel).toBe('10.75')
+    expect(v.cards.fuelHist!.stats).toContain(`Mean ${v.kpis.fuel} L/100 km`)
+  })
+  it('always shows two decimals', () => {
+    expect(rowKpis([row({ 'Combined (L/100 km)': 10.5 })]).fuel).toBe('10.50')
+  })
+})
+
+describe('mean CO2', () => {
+  it('KPI and histogram use the same fixed one-decimal format', () => {
+    const r = [row({ 'CO2 emissions (g/km)': 240 }), row({ 'CO2 emissions (g/km)': 260 })]
+    const v = deriveView(r, all)
+    expect(v.kpis.co2).toBe('250.0')
+    expect(v.cards.co2Hist!.stats).toContain(`Mean ${v.kpis.co2} g/km`)
+    expect(staticCards(stats).co2Hist.stats).toContain(`mean ${staticKpis(stats).co2} `)
+  })
+})
+
+describe('card sentences with missing values', () => {
+  it('say n/a instead of putting the dash placeholder into prose', () => {
+    const r = [row({ 'Combined (L/100 km)': null, 'CO2 emissions (g/km)': null })]
+    const v = deriveView(r, all)
+    expect(v.cards.fuelHist!.stats).toBe('Mean n/a L/100 km · 0 valid records')
+    expect(v.cards.co2Hist!.stats).toBe('Mean n/a g/km · 0 valid records')
+    for (const card of Object.values(v.cards)) {
+      for (const text of [card?.stats, card?.note, card?.title, card?.eyebrow]) {
+        if (text) expect(text).not.toContain('—')
+      }
+    }
   })
 })
 
 describe('staticCards', () => {
   it('uses the overview titles and the stats.json summaries', () => {
     const c = staticCards(stats)
-    expect(c.co2Hist).toMatchObject({ eyebrow: 'Primary target', stats: 'mean 274.2 · median 267 · SD 66', chart: null })
-    expect(c.fuelHist.stats).toBe('mean 12.04 · median 11.6 · SD 3.17')
+    expect(c.co2Hist).toMatchObject({ eyebrow: 'Secondary output', stats: 'mean 274.2 · median 267.0 · SD 66.0', chart: null })
+    expect(c.fuelHist).toMatchObject({ eyebrow: 'Primary target', stats: 'mean 12.04 · median 11.60 · SD 3.17' })
     expect(c.trend).toMatchObject({ title: 'Mean CO₂ emissions and engine size by model year', note: '' })
     expect(c.scatter.r).toBe('')
   })
@@ -97,12 +136,12 @@ describe('deriveView', () => {
     expect(v.resultsSummary).toBe('Showing 4 matching vehicles')
     expect(v.activeFilterSummary).toBe('Fuel: All fuel types · Class: All classes')
     expect(v.status).toBe('')
-    expect(v.cards.co2Hist).toMatchObject({ eyebrow: 'Primary target', title: 'CO₂ emissions distribution', stats: 'Mean 257.5 g/km · 4 valid records' })
-    expect(v.cards.fuelHist).toMatchObject({ eyebrow: 'Secondary target', title: 'Fuel consumption distribution', stats: 'Mean 10.75 L/100 km · 4 valid records' })
+    expect(v.cards.co2Hist).toMatchObject({ eyebrow: 'Secondary output', title: 'CO₂ emissions distribution', stats: 'Mean 257.5 g/km · 4 valid records' })
+    expect(v.cards.fuelHist).toMatchObject({ eyebrow: 'Primary target', title: 'Fuel consumption distribution', stats: 'Mean 10.75 L/100 km · 4 valid records' })
     expect(v.cards.trend).toMatchObject({
       eyebrow: 'Trend over time',
       title: 'Mean CO₂ emissions and engine size by model year',
-      note: 'Yearly means are calculated from the currently included records. Valid CO₂ values: 4; valid engine-size values: 4.',
+      note: 'Yearly means use the currently included records. Valid CO₂ values: 4; valid engine-size values: 4.',
     })
     expect(v.cards.class).toMatchObject({ eyebrow: 'By vehicle class', title: 'Mean CO₂ emissions by vehicle class' })
     expect(v.cards.fuel).toMatchObject({ eyebrow: 'By fuel type', title: 'Record count and mean CO₂ by fuel' })

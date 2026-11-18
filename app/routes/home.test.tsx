@@ -1,6 +1,8 @@
 import { renderToString } from 'react-dom/server'
 import { MemoryRouter } from 'react-router'
 import { describe, expect, it } from 'vitest'
+import { CO2_BAND_NOTE } from '../components/Co2BandChip'
+import { cvSummary, NOTEBOOK_SOURCE, trainingSummary } from '../lib/model-facts'
 import Home, { meta } from './home'
 
 // R2: strip React's text-node separators before asserting on text.
@@ -23,8 +25,25 @@ describe('Home', () => {
       '56 makes',
       '17 NRCan classes',
       '30 NRCan codes',
+      'Target: combined fuel consumption (L/100 km). CO₂ (g/km) is calculated from it using a near-constant factor per fuel type.',
+      trainingSummary(),
+      'Random Forest',
+      cvSummary(),
+      NOTEBOOK_SOURCE,
+      'Hold-out test results: pending',
+      CO2_BAND_NOTE,
+      'The CarVet model will be connected in a later phase.',
+      'is designed to predict',
+      'NRCan data under Open Government Licence – Canada. Public, non-personal data. When the API is connected, inputs will be validated and rate-limited.',
+      'Vehicle technology shifted 1995–2026 (concept drift). Planned: retrain each year when NRCan publishes a new model year, with coverage of the shift to hybrids and EVs.',
     ]) {
       expect(out).toContain(text)
+    }
+  })
+
+  it('omits the previous training, target and prediction claims', () => {
+    for (const text of ['trained on 29,215', 'primary)', 'CarVet returns an estimate', 'Estimate a vehicle', 'inputs validated and API rate-limited', 'Retrained each year']) {
+      expect(out).not.toContain(text)
     }
   })
 
@@ -44,7 +63,7 @@ describe('Home', () => {
     expect(m).toContainEqual({
       name: 'description',
       content:
-        'CarVet — predicting vehicle CO₂ emissions and fuel consumption from specifications, by Team Moneyball.',
+        'CarVet: predicting combined fuel consumption and CO₂ emissions from vehicle specifications, by Team Moneyball.',
     })
   })
 })

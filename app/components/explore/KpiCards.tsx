@@ -9,11 +9,13 @@ export function KpiCards({ kpis }: { kpis: Kpis }) {
       <div className="card p-4">
         <span className="eyebrow">Records</span>
         <p className={VALUE}>{kpis.records}</p>
+        <p className={NOTE}>raw merged data</p>
       </div>
       <div className="card p-4">
         <span className="eyebrow">Model years</span>
-        <p className={VALUE}>{kpis.years}</p>
-        <p className={NOTE}>32 years</p>
+        {/* A full year range is wider than the other values: one step smaller on phones so it fits the 2-column grid. */}
+        <p className="font-headline-lg text-headline-sm sm:text-headline-lg tabular-nums">{kpis.years}</p>
+        <p className={NOTE}>{kpis.yearSpan}</p>
       </div>
       <div className="card p-4">
         <span className="eyebrow">Makes</span>
@@ -29,7 +31,7 @@ export function KpiCards({ kpis }: { kpis: Kpis }) {
         <p className={NOTE}>{kpis.co2Range}</p>
       </div>
       <div className="card p-4">
-        <span className="eyebrow">Mean CO₂ (L/100 km)</span>
+        <span className="eyebrow">Mean combined fuel (L/100 km)</span>
         <p className={VALUE}>{kpis.fuel}</p>
         <p className={NOTE}>{kpis.fuelRange}</p>
       </div>

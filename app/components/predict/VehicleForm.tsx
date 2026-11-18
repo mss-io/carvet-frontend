@@ -155,13 +155,13 @@ export function VehicleForm({
           <select id="fFuel" className="field" value={values.fuel} onChange={(e) => onChange({ fuel: e.target.value })}>
             {D.fuels.map((f) => (
               <option key={f.code} value={f.code}>
-                {`${f.code} — ${f.label}`}
+                {`${f.code}: ${f.label}`}
               </option>
             ))}
           </select>
         </div>
         <button id="runBtn" type="submit" className="btn-primary w-full" disabled={pending}>
-          {pending ? 'Estimating…' : 'Predict'}
+          {pending ? 'Checking…' : 'Predict'}
         </button>
       </form>
     </section>

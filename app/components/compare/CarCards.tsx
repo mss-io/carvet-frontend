@@ -18,7 +18,7 @@ export function CarCards({
     return (
       <div className="card text-center sm:col-span-2">
         <Icon name="git-compare" className="text-primary" />
-        <p className="font-body-md text-body-md text-tertiary mt-2">No cars yet — use the selector above to add your first car.</p>
+        <p className="font-body-md text-body-md text-tertiary mt-2">No cars yet. Use the selector above to add your first car.</p>
       </div>
     )
   }
@@ -43,7 +43,7 @@ export function CarCards({
           <div className="metric-box box-fuel">
             <span className="eyebrow">Fuel use</span>
             <p className="font-title text-title tabular-nums">
-              {r.comb.toFixed(1)} <span className="font-body-sm text-tertiary">L/100km</span>
+              {r.comb.toFixed(1)} <span className="font-body-sm text-tertiary">L/100 km</span>
             </p>
           </div>
           <div className="metric-box box-cost">
