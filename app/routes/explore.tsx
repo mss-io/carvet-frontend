@@ -15,6 +15,7 @@ import {
 import { KpiCards } from '../components/explore/KpiCards'
 import { Icon } from '../components/Icon'
 import { loadCsv, stats } from '../lib/data'
+import { modelSetSummary } from '../lib/model-facts'
 import type { CsvRow } from '../lib/types'
 import type { Route } from './+types/explore'
 
@@ -24,7 +25,7 @@ export function meta(_args: Route.MetaArgs) {
     {
       name: 'description',
       content:
-        'CarVet — predicting vehicle CO₂ emissions and fuel consumption from specifications, by Team Moneyball.',
+        'CarVet: predicting combined fuel consumption and CO₂ emissions from vehicle specifications, by Team Moneyball.',
     },
   ]
 }
@@ -55,6 +56,8 @@ export default function Explore() {
   // Before the CSV loads (and if it fails) the page shows the stats-based figures.
   const loaded = rows !== null && rows.length > 0
   const view = loaded ? deriveView(rows, filters) : null
+  const cards = view ? view.cards : staticCards(stats)
+  const trend = cards.trend
   const status = failed
     ? ERROR_STATUS
     : rows === null
@@ -70,8 +73,7 @@ export default function Explore() {
             Canadian light-duty vehicles, 1995–2026
           </h1>
           <p className="font-body-lg text-body-lg text-on-surface-variant">
-            29,215 vehicle configurations from NRCan. Battery-electric and plug-in hybrid vehicles are published separately
-            and excluded: they use different rating measures and have no tailpipe CO₂ value.
+            {`29,215 vehicle configurations from NRCan (raw merged data). ${modelSetSummary()} Battery-electric and plug-in hybrid vehicles are published separately and excluded: they use different rating measures and have no tailpipe CO₂ value.`}
           </p>
         </div>
         <div className="flex flex-col gap-2 min-w-[220px]">
@@ -79,7 +81,7 @@ export default function Explore() {
             <Icon name="target" className="text-xl text-primary" />
             <div>
               <span className="eyebrow">Primary target</span>
-              <p className="font-title text-title">CO₂ emissions</p>
+              <p className="font-title text-title">Combined fuel (L/100 km)</p>
             </div>
           </div>
         </div>
@@ -100,7 +102,10 @@ export default function Explore() {
       />
 
       <ExploreCharts
-        cards={view ? view.cards : staticCards(stats)}
+        cards={{
+          ...cards,
+          trend: trend && { ...trend, note: trend.note?.replace('are calculated from', 'use') },
+        }}
         visible={view ? view.visible : CHART_KEYS}
         chartKey={`${filters.fuel}|${filters.vehicleClass}`}
         showGrid={!failed && (view ? view.visible.length > 0 : true)}

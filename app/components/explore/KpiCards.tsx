@@ -9,6 +9,7 @@ export function KpiCards({ kpis }: { kpis: Kpis }) {
       <div className="card p-4">
         <span className="eyebrow">Records</span>
         <p className={VALUE}>{kpis.records}</p>
+        <p className={NOTE}>raw merged data</p>
       </div>
       <div className="card p-4">
         <span className="eyebrow">Model years</span>
@@ -29,7 +30,7 @@ export function KpiCards({ kpis }: { kpis: Kpis }) {
         <p className={NOTE}>{kpis.co2Range}</p>
       </div>
       <div className="card p-4">
-        <span className="eyebrow">Mean CO₂ (L/100 km)</span>
+        <span className="eyebrow">Mean combined fuel (L/100 km)</span>
         <p className={VALUE}>{kpis.fuel}</p>
         <p className={NOTE}>{kpis.fuelRange}</p>
       </div>

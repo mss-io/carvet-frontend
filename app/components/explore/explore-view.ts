@@ -320,13 +320,13 @@ function renderOverview(rows: CsvRow[]): Partial<Record<ChartKey, CardView>> {
   const validCo2 = count(validCount(rows, CO2))
   return {
     co2Hist: {
-      eyebrow: 'Primary target',
+      eyebrow: 'Secondary output',
       title: 'CO₂ emissions distribution',
       stats: `Mean ${fmtMax(averageFor(rows, CO2), 1)} g/km · ${validCo2} valid records`,
       chart: histChart(rows.map((row) => row[CO2]), COLORS.blue),
     },
     fuelHist: {
-      eyebrow: 'Secondary target',
+      eyebrow: 'Primary target',
       title: 'Fuel consumption distribution',
       stats: `Mean ${fmtMax(averageFor(rows, FUEL), 2)} L/100 km · ${count(validCount(rows, FUEL))} valid records`,
       chart: histChart(rows.map((row) => row[FUEL]), COLORS.teal),
@@ -413,13 +413,13 @@ export function staticCards(stats: Stats): Record<ChartKey, CardView> {
   const k = stats.kpis
   return {
     co2Hist: {
-      eyebrow: 'Primary target',
+      eyebrow: 'Secondary output',
       title: 'CO₂ emissions distribution',
       stats: `mean ${k.co2.mean} · median ${k.co2.median} · SD ${k.co2.sd}`,
       chart: null,
     },
     fuelHist: {
-      eyebrow: 'Secondary target',
+      eyebrow: 'Primary target',
       title: 'Fuel consumption distribution',
       stats: `mean ${k.fuel.mean} · median ${k.fuel.median} · SD ${k.fuel.sd}`,
       chart: null,

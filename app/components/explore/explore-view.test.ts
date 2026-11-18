@@ -83,8 +83,8 @@ describe('KPIs', () => {
 describe('staticCards', () => {
   it('uses the overview titles and the stats.json summaries', () => {
     const c = staticCards(stats)
-    expect(c.co2Hist).toMatchObject({ eyebrow: 'Primary target', stats: 'mean 274.2 · median 267 · SD 66', chart: null })
-    expect(c.fuelHist.stats).toBe('mean 12.04 · median 11.6 · SD 3.17')
+    expect(c.co2Hist).toMatchObject({ eyebrow: 'Secondary output', stats: 'mean 274.2 · median 267 · SD 66', chart: null })
+    expect(c.fuelHist).toMatchObject({ eyebrow: 'Primary target', stats: 'mean 12.04 · median 11.6 · SD 3.17' })
     expect(c.trend).toMatchObject({ title: 'Mean CO₂ emissions and engine size by model year', note: '' })
     expect(c.scatter.r).toBe('')
   })
@@ -97,8 +97,8 @@ describe('deriveView', () => {
     expect(v.resultsSummary).toBe('Showing 4 matching vehicles')
     expect(v.activeFilterSummary).toBe('Fuel: All fuel types · Class: All classes')
     expect(v.status).toBe('')
-    expect(v.cards.co2Hist).toMatchObject({ eyebrow: 'Primary target', title: 'CO₂ emissions distribution', stats: 'Mean 257.5 g/km · 4 valid records' })
-    expect(v.cards.fuelHist).toMatchObject({ eyebrow: 'Secondary target', title: 'Fuel consumption distribution', stats: 'Mean 10.75 L/100 km · 4 valid records' })
+    expect(v.cards.co2Hist).toMatchObject({ eyebrow: 'Secondary output', title: 'CO₂ emissions distribution', stats: 'Mean 257.5 g/km · 4 valid records' })
+    expect(v.cards.fuelHist).toMatchObject({ eyebrow: 'Primary target', title: 'Fuel consumption distribution', stats: 'Mean 10.75 L/100 km · 4 valid records' })
     expect(v.cards.trend).toMatchObject({
       eyebrow: 'Trend over time',
       title: 'Mean CO₂ emissions and engine size by model year',
