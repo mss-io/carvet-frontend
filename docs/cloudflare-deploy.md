@@ -32,7 +32,7 @@ Use your real production URL (the `workers.dev` URL or your custom domain). Prev
 3. Keep the default commands:
    - Build: `npm run build`. Runs on every push (type generation, typecheck, prerender, copies the 404 page).
    - Deploy: `npm run deploy` (`wrangler deploy`). Runs for pushes to `main` (production).
-   - Preview: `npx wrangler preview`. Runs for other branches.
+   - Preview: `npx wrangler preview`. Runs for other branches. It needs the `"previews": {}` block in `wrangler.jsonc` (already there); without it the deploy step fails with "missing a `previews` block" even though the build succeeded.
 4. Settings -> Builds -> enable **Builds for Preview branches** to get per-branch preview URLs.
 5. Node version: Cloudflare uses the repo's `.node-version` (`22`). React Router 8 needs Node >=22.22.
 6. Optional: add a custom domain (Settings -> Domains & Routes).

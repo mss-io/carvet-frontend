@@ -6,5 +6,8 @@
     "directory": "./build/client",
     "not_found_handling": "404-page",
     "html_handling": "drop-trailing-slash"
-  }
+  },
+  // Required by `npx wrangler preview` (Cloudflare preview builds for non-main branches). Can stay empty:
+  // assets and compatibility settings are inherited from the top level.
+  "previews": {}
 }
