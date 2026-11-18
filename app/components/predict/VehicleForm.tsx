@@ -161,7 +161,7 @@ export function VehicleForm({
           </select>
         </div>
         <button id="runBtn" type="submit" className="btn-primary w-full" disabled={pending}>
-          {pending ? 'Estimating…' : 'Predict'}
+          {pending ? 'Checking…' : 'Predict'}
         </button>
       </form>
     </section>

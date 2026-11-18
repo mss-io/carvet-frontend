@@ -13,7 +13,8 @@ export function KpiCards({ kpis }: { kpis: Kpis }) {
       </div>
       <div className="card p-4">
         <span className="eyebrow">Model years</span>
-        <p className={VALUE}>{kpis.years}</p>
+        {/* A full year range is wider than the other values: one step smaller on phones so it fits the 2-column grid. */}
+        <p className="font-headline-lg text-headline-sm sm:text-headline-lg tabular-nums">{kpis.years}</p>
         <p className={NOTE}>{kpis.yearSpan}</p>
       </div>
       <div className="card p-4">

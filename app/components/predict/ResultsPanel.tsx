@@ -9,7 +9,7 @@ export type ResultState =
   | { kind: 'error'; message: string }
 
 export const EMPTY_MESSAGE = 'This mockup only includes the example vehicles. Pick one to see its official NRCan rating.'
-export const ERROR_MESSAGE = 'Something went wrong while estimating. Please try again.'
+export const ERROR_MESSAGE = 'Something went wrong while loading the result. Please try again.'
 
 export function ResultsPanel({
   state,
@@ -21,7 +21,7 @@ export function ResultsPanel({
 }) {
   const pending = state.kind === 'pending'
   const shown = state.kind === 'result' ? state.prediction : pending ? previous : null
-  const official = shown?.source === 'preset' && state.kind !== 'empty' && state.kind !== 'error'
+  const official = shown?.source === 'preset'
 
   return (
     <section

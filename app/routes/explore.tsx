@@ -15,7 +15,8 @@ import {
 import { KpiCards } from '../components/explore/KpiCards'
 import { Icon } from '../components/Icon'
 import { loadCsv, stats } from '../lib/data'
-import { modelSetSummary } from '../lib/model-facts'
+import { fmt } from '../lib/carvet'
+import { MODEL_FACTS, modelSetSummary } from '../lib/model-facts'
 import type { CsvRow } from '../lib/types'
 import type { Route } from './+types/explore'
 
@@ -71,7 +72,7 @@ export default function Explore() {
             Canadian light-duty vehicles, 1995–2026
           </h1>
           <p className="font-body-lg text-body-lg text-on-surface-variant">
-            {`29,215 vehicle configurations from NRCan (raw merged data). ${modelSetSummary()} Battery-electric and plug-in hybrid vehicles are published separately and excluded: they use different rating measures and have no tailpipe CO₂ value.`}
+            {`${fmt(MODEL_FACTS.rawRecords)} vehicle configurations from NRCan (raw merged data). ${modelSetSummary()} Battery-electric and plug-in hybrid vehicles are published separately and excluded: they use different rating measures and have no tailpipe CO₂ value.`}
           </p>
         </div>
         <div className="flex flex-col gap-2 min-w-[220px]">

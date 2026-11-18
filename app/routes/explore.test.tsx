@@ -1,7 +1,8 @@
 import { renderToString } from 'react-dom/server'
 import { MemoryRouter } from 'react-router'
 import { describe, expect, it } from 'vitest'
-import { modelSetSummary } from '../lib/model-facts'
+import { fmt } from '../lib/carvet'
+import { MODEL_FACTS, modelSetSummary } from '../lib/model-facts'
 import Explore, { meta } from './explore'
 
 // R2: strip React's text-node separators before asserting on text.
@@ -22,8 +23,8 @@ describe('Explore', () => {
       'range 94–633',
       '12.04',
       'range 4.0–27.5',
-      'mean 274.2 · median 267 · SD 66',
-      'mean 12.04 · median 11.6 · SD 3.17',
+      'mean 274.2 · median 267.0 · SD 66.0',
+      'mean 12.04 · median 11.60 · SD 3.17',
     ]) {
       expect(out).toContain(text)
     }
@@ -31,7 +32,7 @@ describe('Explore', () => {
 
   it('shows the same mean combined fuel in the KPI card and the histogram', () => {
     expect(out).toContain('Mean combined fuel (L/100 km)</span><p class="font-headline-lg text-headline-lg tabular-nums">12.04</p>')
-    expect(out).toContain('mean 12.04 · median 11.6 · SD 3.17')
+    expect(out).toContain('mean 12.04 · median 11.60 · SD 3.17')
   })
 
   it('shows the loading status and no canvas before the CSV loads', () => {
@@ -46,7 +47,7 @@ describe('Explore', () => {
     expect(out).toContain('Mean combined fuel (L/100 km)')
     expect(out).toContain('Combined fuel (L/100 km)')
     expect(out).toContain('raw merged data')
-    expect(out).toContain(modelSetSummary())
+    expect(out).toContain(`${fmt(MODEL_FACTS.rawRecords)} vehicle configurations from NRCan (raw merged data). ${modelSetSummary()}`)
   })
 
   it('renders the static filters and data dictionary', () => {

@@ -73,7 +73,8 @@ describe('SiteFooter', () => {
 
   it('identifies the mockup and its official ratings', () => {
     const out = html(<SiteFooter />)
-    expect(out).toContain('CarVet is a course mockup. Values shown are official NRCan ratings.')
+    expect(out).toContain('CarVet is a course mockup. Ratings come from official NRCan data; fuel costs and CO₂ bands are CarVet calculations.')
+    expect(out).not.toContain('Values shown are official NRCan ratings.')
     expect(out).not.toContain('Estimates are not official NRCan ratings.')
   })
 })

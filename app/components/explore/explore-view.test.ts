@@ -95,11 +95,35 @@ describe('mean combined fuel', () => {
   })
 })
 
+describe('mean CO2', () => {
+  it('KPI and histogram use the same fixed one-decimal format', () => {
+    const r = [row({ 'CO2 emissions (g/km)': 240 }), row({ 'CO2 emissions (g/km)': 260 })]
+    const v = deriveView(r, all)
+    expect(v.kpis.co2).toBe('250.0')
+    expect(v.cards.co2Hist!.stats).toContain(`Mean ${v.kpis.co2} g/km`)
+    expect(staticCards(stats).co2Hist.stats).toContain(`mean ${staticKpis(stats).co2} `)
+  })
+})
+
+describe('card sentences with missing values', () => {
+  it('say n/a instead of putting the dash placeholder into prose', () => {
+    const r = [row({ 'Combined (L/100 km)': null, 'CO2 emissions (g/km)': null })]
+    const v = deriveView(r, all)
+    expect(v.cards.fuelHist!.stats).toBe('Mean n/a L/100 km · 0 valid records')
+    expect(v.cards.co2Hist!.stats).toBe('Mean n/a g/km · 0 valid records')
+    for (const card of Object.values(v.cards)) {
+      for (const text of [card?.stats, card?.note, card?.title, card?.eyebrow]) {
+        if (text) expect(text).not.toContain('—')
+      }
+    }
+  })
+})
+
 describe('staticCards', () => {
   it('uses the overview titles and the stats.json summaries', () => {
     const c = staticCards(stats)
-    expect(c.co2Hist).toMatchObject({ eyebrow: 'Secondary output', stats: 'mean 274.2 · median 267 · SD 66', chart: null })
-    expect(c.fuelHist).toMatchObject({ eyebrow: 'Primary target', stats: 'mean 12.04 · median 11.6 · SD 3.17' })
+    expect(c.co2Hist).toMatchObject({ eyebrow: 'Secondary output', stats: 'mean 274.2 · median 267.0 · SD 66.0', chart: null })
+    expect(c.fuelHist).toMatchObject({ eyebrow: 'Primary target', stats: 'mean 12.04 · median 11.60 · SD 3.17' })
     expect(c.trend).toMatchObject({ title: 'Mean CO₂ emissions and engine size by model year', note: '' })
     expect(c.scatter.r).toBe('')
   })

@@ -2,7 +2,7 @@ import { renderToString } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
 import type { Prediction } from '../../lib/types'
 import { CO2_BAND_NOTE } from '../Co2BandChip'
-import { ResultsPanel } from './ResultsPanel'
+import { ERROR_MESSAGE, ResultsPanel } from './ResultsPanel'
 
 const preset: Prediction = { co2: 199, comb: 8.5, city: 9.9, hwy: 7.1, label: 'Test car', source: 'preset' }
 
@@ -53,5 +53,11 @@ describe('ResultsPanel', () => {
 
     expect(out).toContain('Official NRCan rating</h2>')
     expect(out).toContain('opacity-60')
+  })
+})
+
+describe('ResultsPanel copy', () => {
+  it('does not talk about estimating in the error message', () => {
+    expect(ERROR_MESSAGE).toBe('Something went wrong while loading the result. Please try again.')
   })
 })

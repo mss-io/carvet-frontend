@@ -99,6 +99,16 @@ Explore handling of 29,215 vs 25,822 (decided by the user, option A): label Expl
   - Model years shows "1995–2026" with sub-label "32 years" (both derived from the data).
 - **Predict:** heading "Predict fuel use and CO₂."; the details section is titled "About the model". The meta title ("CarVet · Predict") and description already lead with fuel use, so they are unchanged.
 
+## Code review fixes (2026-11-18)
+
+- **Footer:** "CarVet is a course mockup. Ratings come from official NRCan data; fuel costs and CO₂ bands are CarVet calculations." (The previous wording called every value shown an official rating, including calculated fuel costs.)
+- **Explore hero:** the raw count comes from `MODEL_FACTS.rawRecords`, not a literal.
+- **Explore number formats:** mean fuel is always 2 decimals (`fmtMeanFuel`) and mean CO₂ always 1 decimal (`fmtMeanCo2`). KPI cards and histograms share these, and the static histogram line formats median and SD the same way (en-CA).
+- **Placeholder in prose:** a missing mean inside a card sentence reads "n/a" (e.g. "Mean n/a L/100 km · 0 valid records"); the standalone "—" stays for value slots.
+- **Model years KPI:** one step smaller on phones so "1995–2026" fits the 2-column grid.
+- **Predict copy:** submit button shows "Checking…" while pending; error message "Something went wrong while loading the result. Please try again."
+- **AGENTS.md:** the Explore KPI and footer differences are listed as intentional.
+
 ## Left to the builder
 
 - Exact markup and spacing of the Performance card, Mockup note, smog note and band notes, using existing card styles and theme tokens.
